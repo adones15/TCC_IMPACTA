@@ -77,10 +77,15 @@ WSGI_APPLICATION = 'tcc_mercado.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'lcsrua04_mercado',
+        'USER': 'lcsrua04_mercado',
+        'HOST': '162.241.203.86',
+        'PASSWORD': 'Zz#k(0(QU(_w',
+        'PORT': '3306',
     }
 }
+
 
 
 # Password validation
