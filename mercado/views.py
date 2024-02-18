@@ -7,3 +7,6 @@ from django.contrib.auth import logout as logout_django
 
 def pag_inicial(request):
     return render(request, "pag_inicial.html")
+
+def produto(request):
+    return render(request, "./produto.html")
