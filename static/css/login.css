@@ -1,0 +1,124 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap')
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+} */
+
+body {
+    background-color: blue;
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+#container {
+    background-color: #f0f8ff;
+    width: 600px;
+    padding: 20px;
+    border-radius: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.tab-btn {
+    width: 100%;
+    border: none;
+    color: #020617;
+    background-color: #f0f8ff;
+    border-radius: 8px 8px 0px 0px;
+    font-weight: 500;
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color .3s ease;
+    font-weight: bolder;
+}
+
+.tab-btn.active {
+    background-color: #f2ecdc;
+
+}
+
+.tab-btn:hover {
+    background-color: #f1e5c1;
+
+}
+
+.content {
+    display: none;
+}
+
+.content.show {
+    display: flex;
+    gap: 14px;
+    background-color: #f2ecdc;
+    border-radius: 8px 8px 0px 0px;
+    padding: 16px;
+}
+
+* {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f2ecdc;
+
+}
+
+
+.container__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.container__login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 38%;
+
+}
+
+.container__login {
+
+    display: flex;
+    flex-direction: column;
+}
+
+.container__login>.log {
+    display: flex;
+    flex-direction: column;
+    width: 150%;
+
+}
+
+.log>.input {
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+
+}
+
+
+.btn_login {
+    margin-top: 10px;
+}
+
+.button_cadastro {
+    margin-top: 10px;
+
+}
+
+.btn_login {
+    background-color: #00b34c;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+}
