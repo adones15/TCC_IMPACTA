@@ -25,3 +25,15 @@ class Funcionarios(models.Model):
 
     class Meta:
         db_table = 'funcionarios'
+
+class EntradaProdutos(models.Model):
+    ID_Entrada = models.AutoField(primary_key=True)
+    ID_Produto = models.IntegerField()
+    Numero_Nota_Fiscal = models.CharField(max_length=50)
+    Data_Entrada = models.DateField()
+    Quantidade_Entrada = models.IntegerField()
+    Preco_Unitario = models.DecimalField(max_digits=10, decimal_places=2)
+    Fornecedor = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'entrada_produtos'

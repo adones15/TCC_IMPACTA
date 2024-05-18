@@ -4,9 +4,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_django
 from django.contrib.auth import logout as logout_django
-from .models import Produtos, Funcionarios
+from .models import Produtos, Funcionarios, EntradaProdutos
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.shortcuts import render
+from django.db import connection
 
 def produto(request):
 
@@ -105,3 +107,71 @@ def autenticar_funcionario(request):
         # Exibindo a mensagem de usuario nao encontrado
         messages.success(request, 'Nao existe nenhum usuario com esse nome')
         return redirect('login')
+
+def entrada(request):
+    # POST
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        nfiscal = request.POST.get('nfiscal')
+        Data_Entrada = request.POST.get('Data_Entrada')
+        quantidade = request.POST.get('quantidade')
+        preco = request.POST.get('preco')
+        fornecedor = request.POST.get('fornecedor')
+
+        # Criar uma nova instância do modelo da entrada com os dados do formulário
+        entrada_produtos = EntradaProdutos(ID_Produto=id, Numero_Nota_Fiscal=nfiscal, Data_Entrada=Data_Entrada, Quantidade_Entrada=quantidade, Preco_Unitario=preco, Fornecedor=fornecedor)
+                
+        # Salvar o novo produto no banco de dados
+        entrada_produtos.save()
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+            SELECT ep.ID_Entrada,
+            ep.ID_Produto,
+            p.Nome,
+            ep.Numero_Nota_Fiscal,
+            ep.Data_Entrada,
+            ep.Quantidade_Entrada,
+            ep.Preco_Unitario,
+            (ep.Quantidade_Entrada * ep.Preco_Unitario) as Preco_Total,
+            ep.Fornecedor
+            FROM entrada_produtos ep
+            JOIN produtos p ON p.ID_Produto = ep.ID_Produto;
+            """)
+            rows = cursor.fetchall()
+
+            # Processando os resultados
+            column_names = [col[0] for col in cursor.description]
+            entradas = [
+                dict(zip(column_names, row))
+                for row in rows
+            ]
+
+        produtos = Produtos.objects.all()
+        return render(request, './entrada.html', {'produtos': produtos, 'entradas': entradas})
+    else:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT ep.ID_Entrada,
+                ep.ID_Produto,
+                p.Nome,
+                ep.Numero_Nota_Fiscal,
+                ep.Data_Entrada,
+                ep.Quantidade_Entrada,
+                ep.Preco_Unitario,
+                (ep.Quantidade_Entrada * ep.Preco_Unitario) as Preco_Total,
+                ep.Fornecedor
+                FROM entrada_produtos ep
+                JOIN produtos p ON p.ID_Produto = ep.ID_Produto;
+            """)
+            rows = cursor.fetchall()
+
+            # Processando os resultados
+            column_names = [col[0] for col in cursor.description]
+            entradas = [
+                dict(zip(column_names, row))
+                for row in rows
+            ]
+
+        produtos = Produtos.objects.all()
+        return render(request, './entrada.html', {'produtos': produtos, 'entradas': entradas})
