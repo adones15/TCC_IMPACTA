@@ -37,3 +37,22 @@ class EntradaProdutos(models.Model):
 
     class Meta:
         db_table = 'entrada_produtos'
+
+class RegistroVendas(models.Model):
+    ID_Venda = models.AutoField(primary_key=True)
+    Quantidade_Vendida = models.IntegerField()
+    Valor_Total = models.DecimalField(max_digits=10, decimal_places=2)
+    Metodo_Pagamento = models.CharField(max_length=100)
+    Nota_Fiscal = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'registro_vendas'
+
+class RegistroVendasProdutos(models.Model):
+    ID_Venda = models.IntegerField()
+    ID_Produto = models.IntegerField()
+    Quantidade_Vendida = models.IntegerField()
+    Valor_Unitario_Produto = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        db_table = 'registro_vendas_produtos'

@@ -4,11 +4,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_django
 from django.contrib.auth import logout as logout_django
-from .models import Produtos, Funcionarios, EntradaProdutos
+from .models import Produtos, Funcionarios, EntradaProdutos, RegistroVendas, RegistroVendasProdutos
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.shortcuts import render
 from django.db import connection
+import json
 
 def produto(request):
 
@@ -175,3 +176,44 @@ def entrada(request):
 
         produtos = Produtos.objects.all()
         return render(request, './entrada.html', {'produtos': produtos, 'entradas': entradas})
+    
+def venda(request):
+    if request.method == 'GET':
+        produtos = Produtos.objects.all()
+        return render(request, 'venda.html', {'produtos': produtos})
+    elif request.method == 'POST':
+        metodo_pagamento = request.POST.get('metodoPagamento')
+        n_fiscal = request.POST.get('nFiscal')
+        produtos_json = request.POST.get('produtos_json')
+
+        # Verificar se produtos_json não é None ou vazio
+        if not produtos_json:
+            return render(request, 'venda.html', {'error': 'Nenhum produto adicionado.'})
+
+        produtos = json.loads(produtos_json)
+
+        # Primeiro, criar a venda principal para obter o ID
+        registro_venda = RegistroVendas(
+            Quantidade_Vendida=sum(int(produto['quantidade']) for produto in produtos),  # Total quantity
+            Valor_Total=sum(float(produto['valor']) * int(produto['quantidade']) for produto in produtos),  # Total value
+            Metodo_Pagamento=metodo_pagamento, 
+            Nota_Fiscal=n_fiscal
+        )
+        registro_venda.save()
+
+        for produto in produtos:
+            print('PRODUTOS: ')
+            print(produto['idProduto'])
+            id_produto = produto['idProduto']
+            quantidade = produto['quantidade']
+            valor = produto['valor']
+
+            registro_venda_produto = RegistroVendasProdutos(
+                ID_Venda=registro_venda.ID_Venda,
+                ID_Produto=id_produto, 
+                Quantidade_Vendida=quantidade, 
+                Valor_Unitario_Produto=valor, 
+            )
+            registro_venda_produto.save()
+
+    return redirect('venda')

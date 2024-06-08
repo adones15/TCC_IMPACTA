@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'tcc_mercado.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tcc_impacta',
-        'USER': 'root',
-        'HOST': 'localhost',
-        'PASSWORD': '2@xxYYxx@2',
+        'NAME': 'teste',
+        'USER': 'sa',
+        'HOST': '195.35.19.157',
+        'PASSWORD': 'ImohtepHotep71*',
         'PORT': '3306',
     }
 }

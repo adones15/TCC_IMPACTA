@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venda</title>
+    <link href="{% static 'css/venda.css'%}" rel="stylesheet" />
+    <link href="{% static 'css/geral.css'%}" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="navbar bg-body-tertiary ">
+
+        <div class="container-fluid d-flex justify-content-between">
+            <a class="navbar-brand" id="ColorTitleNav" href="#" style="font-size: 32px;">Venda</a>
+            <button class="btn btn-warning" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <img src="{% static 'images/carrinho_icone.png' %}" alt="some text" width=60 height=40>
+            </button>
+        </div>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="menu" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a href="/produto" id="ColorTitleNav" class="nav-link active; navbar-brand">Produtos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/entrada" id="ColorTitleNav" class="nav-link active; navbar-brand">Compras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/venda" id="ColorTitleNav" class="nav-link active; navbar-brand">Vendas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" id="ColorTitleNav" class="nav-link active; navbar-brand">Funcionários</a>
+                    </li>
+                    <br>
+                    <br>
+                    <li class="nav-item">
+                        <a href="file:///C:/Users/Samsung/Desktop/TCC%20IMPACTA/Crud%20Completo/TelaPrincipal.html"
+                            id="ColorTitleNav" class="nav-link active; navbar-brand">Tela Principal</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div style="background-color: lightskyblue; height: 560px">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <button onclick="adicionarProduto()" type="button" data-bs-toggle="modal"
+                        data-bs-target="#add-produto" class="btn btn-warning float-right">Produto</button>
+                </div>
+            </div>
+            <form method="post" action="{% url 'venda' %}">
+                {% csrf_token %}
+                <div style="margin-top: 20px;" class="row text-center">
+                    <div class="col-8">
+                        <table class="table table-light table-hover" id="tabelaItens">
+                            <thead>
+                                <th>Codigo Produto</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Valor</th>
+                            </thead>
+                            <tbody>
+                                <tr></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <label>Metodo de pagamento</label>
+                        <input name="metodoPagamento" class="form-control" type="text" />
+
+                        <label>Nota Fiscal</label>
+                        <input name="nFiscal" class="form-control" type="text" />
+                    </div>
+                </div>
+                <input type="hidden" name="produtos_json" id="produtos_json">
+                <div class="row" style="margin-top: 50px;">
+                    <button type="submit" class="btn btn-primary">Salvar Venda</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ######################### -->
+    <!-- MODAIS -->
+
+    <!-- MODAL DE CADASTRO DE PRODUTOS -->
+    <div class="modal fade" id="add-produto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col text-start">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Adicionar Produto</h5>
+                            </div>
+                            <div class="col text-end">
+                                <img style="cursor: pointer;" data-bs-dismiss="modal"
+                                    src="{% static 'images/exit.svg' %}" width="25px" height="auto" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="post-form">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <table>
+                                <tr>
+                                    <div class="form-group" style="margin-bottom: 2%;">
+                                        <label for="id">Produto</label>
+                                        <select id="produto" class="form-select" name="id">
+                                            {% for p in produtos %}
+                                            <option value="{{ p.ID_Produto }} - {{p.Nome}}">{{ p.Nome }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <div class="form-group" style="margin-bottom: 2%;">
+                                        <label for="qtd">Quantidade</label>
+                                        <input id="qtd" type="text" class="form-control" name="qtd" />
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <div class="form-group" style="margin-bottom: 2%;">
+                                        <label for="valor">Valor</label>
+                                        <input id="valor" type="text" class="form-control" name="valor" />
+                                    </div>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                            <button onclick="addProdutoVenda()" class="btn btn-primary">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- ######################### -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script>
+        let produtosArray = [];
+
+        function addProdutoVenda() {
+            const produto = {
+                'idProduto': document.getElementById('produto').value.split(' - ')[0],
+                'nomeProduto': document.getElementById('produto').value.split(' - ')[1],
+                'quantidade': document.getElementById('qtd').value,
+                'valor': document.getElementById('valor').value,
+            };
+
+            produtosArray.push(produto);
+
+            document.getElementById('produto').value = ''
+            document.getElementById('qtd').value = ''
+            document.getElementById('valor').value = ''
+
+            const tbody = document.querySelector('#tabelaItens tbody');
+
+            const tr = document.createElement('tr');
+            Object.values(produto).forEach(valor => {
+                const td = document.createElement('td');
+                td.textContent = valor;
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+
+            // Atualizar o campo oculto com o JSON dos produtos
+            document.getElementById('produtos_json').value = JSON.stringify(produtosArray);
+        }
+
+        document.querySelector('form').addEventListener('submit', function () {
+            document.getElementById('produtos_json').value = JSON.stringify(produtosArray);
+        });
+    </script>
+
+</body>
+
+</html>

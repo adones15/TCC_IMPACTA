@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import login, produto, confirmacaoCadastroProduto, cadastro_funcionario, autenticar_funcionario, entrada
+from .views import login, produto, confirmacaoCadastroProduto, cadastro_funcionario, autenticar_funcionario, entrada, venda
 from django.urls import include
 
 urlpatterns = [
@@ -8,5 +8,6 @@ urlpatterns = [
     path('confirmacao-cadastro-produto/', confirmacaoCadastroProduto, name='confirmacao-cadastro-produto'),
     path('cadastro_funcionario', cadastro_funcionario, name ='cadastro_funcionario'),
     path('autenticar_funcionario', autenticar_funcionario, name='autenticar_funcionario'),
-    path('entrada', entrada, name='entrada')
+    path('entrada', entrada, name='entrada'),
+    path('venda', venda, name='venda')
 ]
